@@ -60,7 +60,7 @@ Put your PDF file(s) into the `documents/` folder.
 ./start.sh
 ````
 
-### It can take from 10 min to hour depends on your internet speed, system power and number of pdf 
+### First time it can take from 10 min to hour depends on your internet speed, system power and number of pdf. To stop the application (all services) run `ctrl + c` in terminal. 
 
 ---
 
