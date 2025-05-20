@@ -9,13 +9,8 @@ services:
       - "11434:11434"
     volumes:
       - ./ollama:/app
-      - llama_models:/root/.ollama/models
+      - llama_models:/root/.ollama 
     entrypoint: ["/bin/bash", "/app/entrypoint.sh"]
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:11434"]
-      interval: 10s
-      timeout: 5s
-      retries: 12
     deploy:
       resources:
         limits:
@@ -27,8 +22,7 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      ollama:
-        condition: service_healthy
+      - ollama
     volumes:
       - ./backend:/app
       - ./documents:/app/documents

@@ -1,10 +1,13 @@
 # File: backend/main.py
+
 import os
-os.environ['OLLAMA_API_URL'] = os.getenv('OLLAMA_API_URL', 'http://ollama:11434')
 import ollama
 import fitz  # PyMuPDF
-import os
 from utils import get_pdf_chunks, cosine_similarity
+
+# Set base URL for Ollama from environment variable
+ollama_base_url = os.getenv('OLLAMA_API_URL', 'http://ollama:11434')
+ollama_client = ollama.Client(base_url=ollama_base_url)
 
 EMBEDDING_MODEL = 'hf.co/CompendiumLabs/bge-base-en-v1.5-gguf'
 LANGUAGE_MODEL = 'hf.co/bartowski/Llama-3.2-1B-Instruct-GGUF'
@@ -12,14 +15,13 @@ LANGUAGE_MODEL = 'hf.co/bartowski/Llama-3.2-1B-Instruct-GGUF'
 VECTOR_DB = []
 
 def embed_text(text):
-    return ollama.embed(model=EMBEDDING_MODEL, input=text)['embeddings'][0]
+    return ollama_client.embed(model=EMBEDDING_MODEL, input=text)['embeddings'][0]
 
 def add_chunk_to_database(chunk):
     embedding = embed_text(chunk)
     VECTOR_DB.append((chunk, embedding))
 
 def ingest_pdfs(folder_path='documents'):
-    # Ingest PDFs only once if VECTOR_DB is empty
     if VECTOR_DB:
         return
     for filename in os.listdir(folder_path):
@@ -39,7 +41,6 @@ def retrieve(query, top_n=3):
     return similarities[:top_n]
 
 def process_query(user_input):
-    # Ensure PDFs ingested before query processing
     ingest_pdfs()
 
     retrieved_knowledge = retrieve(user_input)
@@ -50,7 +51,7 @@ def process_query(user_input):
         + '\n'.join([f" - {chunk}" for chunk, _ in retrieved_knowledge])
     )
 
-    stream = ollama.chat(
+    stream = ollama_client.chat(
         model=LANGUAGE_MODEL,
         messages=[
             {"role": "system", "content": instruction_prompt},
