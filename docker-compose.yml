@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  ollama:
+    build:
+      context: ./ollama
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ./ollama:/app
+      - llama_models:/root/.ollama/models
+    entrypoint: ["/bin/bash", "/app/entrypoint.sh"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    deploy:
+      resources:
+        limits:
+          cpus: '2.00'
+          memory: 8G
+
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      ollama:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+      - ./documents:/app/documents
+    environment:
+      - OLLAMA_API_URL=http://ollama:11434
+    deploy:
+      resources:
+        limits:
+          cpus: '2.00'
+          memory: 4G
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8501:8501"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+    deploy:
+      resources:
+        limits:
+          cpus: '2.00'
+          memory: 4G
+
+volumes:
+  llama_models:
