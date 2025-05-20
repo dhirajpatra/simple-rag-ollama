@@ -13,19 +13,27 @@ This project is a simple Retrieval-Augmented Generation (RAG) chatbot using:
 
 ```
 
-.
-├── backend/
-│   ├── main.py
-│   ├── rag\_engine.py
-│   ├── utils.py
-│   ├── requirements.txt
-├── frontend/
-│   ├── app.py
-│   ├── requirements.txt
-├── documents/                  # Place all PDFs here
+├── backend
+│   ├── Dockerfile
+│   ├── documents
+│   │   └── cv_dhiraj_patra.pdf
+│   ├── main.py
+│   ├── __pycache__  [error opening dir]
+│   ├── rag_engine.py
+│   ├── requirements.txt
+│   └── utils.py
 ├── docker-compose.yml
-├── entrypoint.sh              # Used in ollama service
-└── README.md
+├── documents  [error opening dir]
+├── frontend
+│   ├── app.py
+│   ├── Dockerfile
+│   └── requirements.txt
+├── ollama
+│   ├── Dockerfile
+│   ├── entrypoint.sh
+│   └── ollama.crt.com
+├── README.md
+└── start.sh
 
 ````
 
@@ -44,13 +52,15 @@ These are automatically pulled by the `ollama` container via `entrypoint.sh`.
 
 ### 1. Place your PDFs
 
-Put all your PDF files into the `documents/` folder.
+Put your PDF file(s) into the `documents/` folder. 
 
 ### 2. Start the Application
 
 ```bash
 ./start.sh
 ````
+
+### It can take from 10 min to hour depends on your internet speed, system power and number of pdf 
 
 ---
 
