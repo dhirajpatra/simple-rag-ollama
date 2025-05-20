@@ -4,6 +4,9 @@
 ollama serve &
 OLLAMA_PID=$!
 
+# Ensure model directory exists
+mkdir -p /root/.ollama/models
+
 # Model names
 EMBED_MODEL="hf.co/CompendiumLabs/bge-base-en-v1.5-gguf"
 LANG_MODEL="hf.co/bartowski/Llama-3.2-1B-Instruct-GGUF"
@@ -12,8 +15,12 @@ LANG_MODEL="hf.co/bartowski/Llama-3.2-1B-Instruct-GGUF"
 pull_if_missing() {
   local model="$1"
   if ! ollama list | grep -q "$model"; then
-    echo "Pulling model: $model"
-    ollama pull "$model"
+    echo "Model not found. Pullingl: $model"
+    until ollama pull "$model"; do
+      echo "Retrying to pull model: $model"
+      sleep 5
+    done
+    echo "Model pulled successfully: $model"
   else
     echo "Model already present: $model"
   fi

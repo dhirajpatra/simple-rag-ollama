@@ -7,6 +7,7 @@ This project is a simple Retrieval-Augmented Generation (RAG) chatbot using:
 - **Ollama** for embedding and chat models
 - **User PDFs** stored in `documents/` folder for context
 
+[![Local RAG Chatbot](/images/1.png)]
 ---
 
 ## 📂 Folder Structure
@@ -15,8 +16,6 @@ This project is a simple Retrieval-Augmented Generation (RAG) chatbot using:
 
 ├── backend
 │   ├── Dockerfile
-│   ├── documents
-│   │   └── cv_dhiraj_patra.pdf
 │   ├── main.py
 │   ├── __pycache__  [error opening dir]
 │   ├── rag_engine.py
@@ -24,6 +23,7 @@ This project is a simple Retrieval-Augmented Generation (RAG) chatbot using:
 │   └── utils.py
 ├── docker-compose.yml
 ├── documents  [error opening dir]
+├── entrypoint.sh  [error opening dir]
 ├── frontend
 │   ├── app.py
 │   ├── Dockerfile
@@ -31,9 +31,12 @@ This project is a simple Retrieval-Augmented Generation (RAG) chatbot using:
 ├── ollama
 │   ├── Dockerfile
 │   ├── entrypoint.sh
-│   └── ollama.crt.com
+│   ├── id_ed25519
+│   ├── ollama_server.py
+│   └── requirements.txt
 ├── README.md
 └── start.sh
+
 
 ````
 

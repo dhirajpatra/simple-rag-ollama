@@ -9,7 +9,7 @@ services:
       - "11434:11434"
     volumes:
       - ./ollama:/app
-      - llama_models:/root/.ollama 
+      - llama_models:/root/.ollama/models 
     entrypoint: ["/bin/bash", "/app/entrypoint.sh"]
     deploy:
       resources:
@@ -27,6 +27,7 @@ services:
       - ./backend:/app
       - ./documents:/app/documents
     environment:
+      - PYTHONPATH=/app
       - OLLAMA_API_URL=http://ollama:11434
     deploy:
       resources:
